@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.concurrent.*;
 
 public class ResourcePoolTest {
+
     public static void main(String[] args) throws Exception {
         int maxConcurrentThreads = 5;
         int totalRequests = 50;
@@ -34,8 +35,7 @@ public class ResourcePoolTest {
             System.out.printf("Total requests: %d%n", totalRequests);
             System.out.printf("Successful: %d%n", successCount);
             System.out.printf("Timed out: %d%n", timeoutCount);
-            System.out.printf("Peak concurrent connections: %d%n",
-                    pool.getPeakConnections()); // ②
+            System.out.printf("Peak concurrent connections: %d%n", pool.getPeakConnections()); // ②
 
             assert pool.getPeakConnections() <= maxConcurrentThreads : "Peak connections exceeded limit!";
         }

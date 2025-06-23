@@ -8,6 +8,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.IntStream;
 
 public class LittleLawExample {
+
     public static void main(String[] args) {
         int numTasks = 10000; // ①
         int avgResponseTimeMillis = 500; // Average task response time // ②
@@ -40,7 +41,7 @@ public class LittleLawExample {
 
         try (executor) { // ⑤
             IntStream.range(0, numTasks)
-                    .forEach(_ -> executor.submit(() -> {
+                    .forEach(i -> executor.submit(() -> {
                         task.run();
                         completedTasks.incrementAndGet(); // ⑥
                     }));
@@ -50,7 +51,6 @@ public class LittleLawExample {
         long duration = Duration.between(start, end).toMillis();
         double throughput = (double) completedTasks.get() / duration * 1000; // Tasks per second // ⑧
 
-        System.out.printf("%-25s - Time: %5dms, Throughput: %8.2f tasks/s%n",
-                type, duration, throughput);
+        System.out.printf("%-25s - Time: %5dms, Throughput: %8.2f tasks/s%n", type, duration, throughput);
     }
 }

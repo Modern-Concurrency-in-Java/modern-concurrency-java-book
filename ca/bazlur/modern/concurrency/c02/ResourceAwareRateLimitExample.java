@@ -9,6 +9,7 @@ import java.util.concurrent.*;
 import java.util.stream.IntStream;
 
 public class ResourceAwareRateLimitExample {
+
     private static final HttpClient CLIENT = HttpClient.newBuilder()
             .connectTimeout(Duration.ofSeconds(10)) // ①
             .build();
@@ -19,7 +20,6 @@ public class ResourceAwareRateLimitExample {
 
     public static void main(String[] args) throws Exception {
         Instant start = Instant.now();
-
         List<String> jokes = fetchJokes(50); // ④
 
         long ms = Duration.between(start, Instant.now()).toMillis();
@@ -32,7 +32,7 @@ public class ResourceAwareRateLimitExample {
     private static List<String> fetchJokes(int n) throws Exception {
         try (ExecutorService pool = Executors.newVirtualThreadPerTaskExecutor()) { // ⑤
             List<Future<String>> futures = IntStream.range(0, n)
-                    .mapToObj(_ -> pool.submit(ResourceAwareRateLimitExample::fetchJoke))
+                    .mapToObj(i -> pool.submit(ResourceAwareRateLimitExample::fetchJoke))
                     .toList();
 
             return futures.stream()

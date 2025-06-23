@@ -1,6 +1,7 @@
 package ca.bazlur.modern.concurrency.c02;
 
 public class VirtualThreadInterruption {
+
     public static void main(String[] args) {
         Thread virtualThread = Thread.ofVirtual().start(() -> { // ①
             try {

@@ -1,6 +1,7 @@
 package ca.bazlur.modern.concurrency.c02;
 
 public class PlatformThreadInterruption {
+
     public static void main(String[] args) {
         Thread platformThread = Thread.ofPlatform().start(() -> { // ①
             try {

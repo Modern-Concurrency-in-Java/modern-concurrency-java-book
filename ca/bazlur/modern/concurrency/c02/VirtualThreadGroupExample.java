@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class VirtualThreadGroupExample {
+
     public static void main(String[] args) throws InterruptedException {
         Set<ThreadGroup> threadGroups = new HashSet<>();
 

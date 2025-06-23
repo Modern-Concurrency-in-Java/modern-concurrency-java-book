@@ -7,9 +7,10 @@ import java.util.concurrent.Future;
 
 public class PhraseGeneratorExample {
 
-    void main() {
+    public static void main(String[] args) {
+        PhraseGeneratorExample phraseGeneratorExample = new PhraseGeneratorExample();
         try {
-            System.out.println(generatePhrase());
+            System.out.println(phraseGeneratorExample.generatePhrase());
         } catch (ExecutionException | InterruptedException e) {
         }
     }

@@ -4,6 +4,7 @@ import java.util.Optional;
 import java.util.concurrent.Semaphore;
 
 public class ResourcePool {
+
     private final Semaphore semaphore; // ①
 
     public ResourcePool(int resourceCount) {

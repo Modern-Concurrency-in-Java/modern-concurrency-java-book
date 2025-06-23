@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class MonitoredResourcePool {
+
     private final Semaphore semaphore;
     private final AtomicInteger activeConnections; // ①
     private final AtomicInteger peakConnections; // ②

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 public class ThreadPinnedNativeMethodExample {
+
     public static void main(String[] args) {
         List<Thread> threadList = IntStream.range(0, 10)
                 .mapToObj(i -> Thread.ofVirtual().unstarted(() -> {

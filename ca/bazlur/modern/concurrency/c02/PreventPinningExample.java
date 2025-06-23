@@ -4,6 +4,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.IntStream;
 
 public class PreventPinningExample {
+
     private static final ReentrantLock lock = new ReentrantLock(); // ①
 
     public static void main(String[] args) {
@@ -12,6 +13,7 @@ public class PreventPinningExample {
                     if (i == 0) {
                         System.out.println(Thread.currentThread()); // ②
                     }
+
                     lock.lock(); // ③
                     try {
                         Thread.sleep(25); // ④
@@ -20,6 +22,7 @@ public class PreventPinningExample {
                     } finally {
                         lock.unlock(); // ⑤
                     }
+
                     if (i == 0) {
                         System.out.println(Thread.currentThread()); // ⑥
                     }

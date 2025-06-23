@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.concurrent.*;
 
 public class ImageProcessingExample {
+
     public static void main(String[] args) throws InterruptedException, ExecutionException {
         try (var service = Executors.newVirtualThreadPerTaskExecutor()) {// ①
 

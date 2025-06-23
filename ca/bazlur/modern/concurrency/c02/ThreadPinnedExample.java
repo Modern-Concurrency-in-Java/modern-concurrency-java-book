@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 public class ThreadPinnedExample {
+
     private static final Object lock = new Object();
 
     public static void main(String[] args) {
