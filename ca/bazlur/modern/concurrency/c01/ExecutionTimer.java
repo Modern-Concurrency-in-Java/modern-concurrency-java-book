@@ -3,6 +3,7 @@ package ca.bazlur.modern.concurrency.c01;
 import java.util.concurrent.Callable;
 
 public class ExecutionTimer {
+
     public static <T> T measure(Callable<T> task) throws Exception {
         long startTime = System.nanoTime();
         try {

@@ -122,7 +122,6 @@ public class CreditCalculatorService {
             throw new RuntimeException(e);
         }
     }
-
 }
 
 // Credit calculation models

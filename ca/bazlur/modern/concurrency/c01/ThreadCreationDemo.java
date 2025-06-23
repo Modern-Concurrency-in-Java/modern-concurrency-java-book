@@ -1,6 +1,7 @@
 package ca.bazlur.modern.concurrency.c01;
 
 public class ThreadCreationDemo {
+
     public static void main(String[] args) {
         // Extending Thread class
         Thread t1 = new ThreadByExtension("Worker-1"); // ①
