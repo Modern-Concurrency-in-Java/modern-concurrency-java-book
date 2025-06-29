@@ -35,13 +35,16 @@ public class ImageProcessingExample {
     // Placeholder image transformation functions
     static BufferedImage resizeImage(String url, int width, int height) throws Exception {
         // ... Logic to download and resize the image ...
+        return null;
     }
 
     static BufferedImage applyGrayscale(String url) throws Exception {
         // ... Logic to download and convert the image to grayscale ...
+        return null;
     }
 
     static BufferedImage rotateImage(String url, double angle) throws Exception {
         // ... Logic to download and rotate the image ...
+        return null;
     }
 }
