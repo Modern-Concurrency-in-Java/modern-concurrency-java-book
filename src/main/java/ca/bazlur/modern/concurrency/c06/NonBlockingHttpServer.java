@@ -16,6 +16,8 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static ca.bazlur.modern.concurrency.c06.HttpRequestParser.parseHttpRequest;
+
 public class NonBlockingHttpServer {
     private static final int PORT = 8080;
     private static final AtomicInteger requestCounter = new AtomicInteger(0);

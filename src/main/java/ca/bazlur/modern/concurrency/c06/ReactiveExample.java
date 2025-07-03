@@ -1,5 +1,7 @@
 package ca.bazlur.modern.concurrency.c06;
 
+import reactor.core.publisher.Flux;
+
 public class ReactiveExample {
 
     public static void main(String[] args) {
