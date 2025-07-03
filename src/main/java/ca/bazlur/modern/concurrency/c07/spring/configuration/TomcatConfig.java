@@ -1,6 +1,5 @@
 package ca.bazlur.modern.concurrency.c07.spring.configuration;
 
-import org.springframework.boot.web.embedded.tomcat.TomcatProtocolHandlerCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
