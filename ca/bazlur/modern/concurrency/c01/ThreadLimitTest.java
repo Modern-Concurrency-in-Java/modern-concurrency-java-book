@@ -18,7 +18,6 @@ public class ThreadLimitTest {
         } catch (OutOfMemoryError error) {
             System.out.println("Reached thread limit: " + threadCount);
             error.printStackTrace();
-            System.exit(0);
         }
     }
 }

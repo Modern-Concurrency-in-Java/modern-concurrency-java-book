@@ -1,5 +1,10 @@
 package ca.bazlur.modern.concurrency.c01;
 
+import ca.bazlur.modern.concurrency.c01.model.Asset;
+import ca.bazlur.modern.concurrency.c01.model.Credit;
+import ca.bazlur.modern.concurrency.c01.model.Liability;
+import ca.bazlur.modern.concurrency.c01.model.Person;
+
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -61,10 +66,9 @@ public class CreditCalculatorService {
         }
     }
 
-    // TODO: show usage in ParallelExecutorDemo
     public Credit calculateCreditWithCompletableFuture(Long personId) throws InterruptedException, ExecutionException {
         return runAsync(() -> importantWork()) // ①
-                .thenCompose(_ -> supplyAsync(() -> getPerson(personId))) // ②
+                .thenCompose(aVoid -> supplyAsync(() -> getPerson(personId))) // ②
                 .thenCombineAsync(supplyAsync(() -> getAssets(getPerson(personId))), // ③
                         (person, assets) -> calculateCredits(assets, getLiabilities(person))) // ④
                 .get(); // ⑤
@@ -122,17 +126,4 @@ public class CreditCalculatorService {
             throw new RuntimeException(e);
         }
     }
-}
-
-// Credit calculation models
-record Credit(double score) {
-}
-
-record Person(Long id, String name) {
-}
-
-record Asset(String type, double value) {
-}
-
-record Liability(String type, double amount) {
 }
