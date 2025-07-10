@@ -1,5 +1,6 @@
 package ca.bazlur.modern.concurrency.c03;
 
+// todo: weird class name
 public class Main {
 
     public static void main(String[] args) {

@@ -2,6 +2,7 @@ package ca.bazlur.modern.concurrency.c03;
 
 import java.time.Duration;
 
+// todo: class name could be more descriptive
 public class Demo {
 
     public static void main(String[] args) throws Exception {
