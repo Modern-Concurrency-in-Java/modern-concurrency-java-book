@@ -2,8 +2,7 @@ package ca.bazlur.modern.concurrency.c04;
 
 import module java.base;
 
-public class CollectingJoiner<T>
-        implements StructuredTaskScope.Joiner<T, CollectingJoiner.Result<T>> {
+public class CollectingJoiner<T> implements StructuredTaskScope.Joiner<T, CollectingJoiner.Result<T>> {
 
     private final Queue<T> results = new ConcurrentLinkedQueue<>();
     private final Queue<Throwable> exceptions = new ConcurrentLinkedQueue<>();

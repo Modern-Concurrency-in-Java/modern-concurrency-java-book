@@ -8,9 +8,9 @@ import static java.util.concurrent.StructuredTaskScope.open;
 
 public class AwaitAllDemo {
 
-    private final List<NotificationResult> notificationResults = new CopyOnWriteArrayList<>();
     private final AtomicInteger successCount = new AtomicInteger(0);
     private final AtomicInteger failureCount = new AtomicInteger(0);
+    private final List<NotificationResult> notificationResults = new CopyOnWriteArrayList<>();
 
     void main() {
         String criticalAlert = "URGENT: Database connection pool exhausted - " +
@@ -74,8 +74,7 @@ public class AwaitAllDemo {
         }
     }
 
-    private void sendEmailNotification(String message)
-            throws InterruptedException {
+    private void sendEmailNotification(String message) throws InterruptedException {
         log(" -> Sending email notification...");
         Thread.sleep(Duration.ofMillis(200 + new Random().nextInt(300)));
 
@@ -94,8 +93,7 @@ public class AwaitAllDemo {
         }
     }
 
-    private void sendSmsNotification(String message)
-            throws InterruptedException {
+    private void sendSmsNotification(String message) throws InterruptedException {
         log(" -> Sending SMS notification...");
         Thread.sleep(Duration.ofMillis(150 + new Random().nextInt(400)));
 
@@ -114,8 +112,7 @@ public class AwaitAllDemo {
         }
     }
 
-    private void sendPushNotification(String message)
-            throws InterruptedException {
+    private void sendPushNotification(String message) throws InterruptedException {
         log(" -> Sending push notification...");
         Thread.sleep(Duration.ofMillis(100 + new Random().nextInt(200)));
 

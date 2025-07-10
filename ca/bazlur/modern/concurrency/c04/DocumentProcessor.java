@@ -1,30 +1,88 @@
 package ca.bazlur.modern.concurrency.c04;
 
 import module java.base;
+import com.sun.management.HotSpotDiagnosticMXBean;
+
+import java.lang.management.ManagementFactory;
 
 import static java.util.concurrent.StructuredTaskScope.open;
 
-// todo: some line breaks are unnecessary. fix later
 public class DocumentProcessor {
 
+    private final ThreadFactory threadFactory = Thread.ofVirtual()
+            .name("doc-proc", 1)
+            .factory();
+
     public DocumentReport processDocument(String documentId) throws InterruptedException {
+        try (var gatheringScope = open(StructuredTaskScope.Joiner.<String>allSuccessfulOrThrow(),
+                conf -> conf.withThreadFactory(threadFactory).withName("doc-gathering-scope"))) {            // ①
 
-        try (var gatheringScope = open(StructuredTaskScope.Joiner.
-                <String>allSuccessfulOrThrow())) {                          // ①
-
-            var headerTask = gatheringScope.fork(() -> fetchHeader(documentId));     // ②
-            var bodyTask = gatheringScope.fork(() -> fetchBody(documentId));        // ③
-            var metadataTask = gatheringScope.fork(() -> fetchMetadata(documentId)); // ④
+            var headerTask = gatheringScope.fork(() ->
+                    fetchHeader(documentId));     // ②
+            var bodyTask = gatheringScope.fork(() ->
+                    fetchBody(documentId));       // ③
+            var metadataTask = gatheringScope.fork(() ->
+                    fetchMetadata(documentId));   // ④
 
             gatheringScope.join();                                          // ⑤
 
-            return analyzeContent(headerTask.get(),
-                    bodyTask.get(),
-                    metadataTask.get()); // ⑥
+            return analyzeContent(headerTask.get(), bodyTask.get(), metadataTask.get());
         } catch (StructuredTaskScope.FailedException e) {
             throw new RuntimeException("Failed to gather document content", e);
         }
     }
+
+    public void processWithErrorHandling(String documentId) {
+        try (var scope = open(StructuredTaskScope.Joiner.<String>allSuccessfulOrThrow(),
+                cf -> cf.withName("error-prone-scope"))) {
+
+            scope.fork(() -> {
+                if (new Random().nextBoolean()) {                              // ①
+                    throw new RuntimeException("Simulated failure");
+                }
+                return fetchHeader(documentId);
+            });
+
+            scope.join();
+
+        } catch (StructuredTaskScope.FailedException e) {
+            HotSpotDiagnosticMXBean bean = ManagementFactory.getPlatformMXBean(HotSpotDiagnosticMXBean.class);  // ②
+
+            try {
+                Path path = Path.of("./structured-concurrency-error.json");
+                bean.dumpThreads(path.toAbsolutePath().toString(),
+                        HotSpotDiagnosticMXBean.ThreadDumpFormat.JSON);            // ③
+
+                System.out.println("Thread dump captured: " + path);
+            } catch (IOException ex) {
+                throw new RuntimeException("Failed to generate thread dump", ex);
+            }
+
+            throw new RuntimeException("Processing failed", e);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException("Processing interrupted", e);
+        }
+    }
+
+//    public DocumentReport processDocument(String documentId) throws InterruptedException {
+//
+//        try (var gatheringScope = open(StructuredTaskScope.Joiner.
+//                <String>allSuccessfulOrThrow())) {                          // ①
+//
+//            var headerTask = gatheringScope.fork(() -> fetchHeader(documentId));     // ②
+//            var bodyTask = gatheringScope.fork(() -> fetchBody(documentId));        // ③
+//            var metadataTask = gatheringScope.fork(() -> fetchMetadata(documentId)); // ④
+//
+//            gatheringScope.join();                                          // ⑤
+//
+//            return analyzeContent(headerTask.get(),
+//                    bodyTask.get(),
+//                    metadataTask.get()); // ⑥
+//        } catch (StructuredTaskScope.FailedException e) {
+//            throw new RuntimeException("Failed to gather document content", e);
+//        }
+//    }
 
     private DocumentReport analyzeContent(String header,
                                           String body,
@@ -34,12 +92,9 @@ public class DocumentProcessor {
         try (var analysisScope = open(StructuredTaskScope.Joiner.
                 allSuccessfulOrThrow())) {                          // ①
 
-            var wordCountTask = analysisScope.fork(() ->
-                    countWords(body));                          // ②
-            var sentimentTask = analysisScope.fork(() ->
-                    analyzeSentiment(body));                    // ③
-            var summaryTask = analysisScope.fork(() ->
-                    generateSummary(header, body, metadata));   // ④
+            var wordCountTask = analysisScope.fork(() -> countWords(body));                        // ②
+            var sentimentTask = analysisScope.fork(() -> analyzeSentiment(body));                  // ③
+            var summaryTask = analysisScope.fork(() -> generateSummary(header, body, metadata));   // ④
 
             analysisScope.join();              // ⑤
 
@@ -53,33 +108,46 @@ public class DocumentProcessor {
         }
     }
 
-    private String fetchHeader(String documentId)
-            throws InterruptedException {
-        Thread.sleep(Duration.ofMillis(100));
+    private String fetchHeader(String documentId) throws InterruptedException {
+        Thread.sleep(Duration.ofSeconds(10));        // ⑥
         return "Header for document " + documentId;
     }
 
-    private String fetchBody(String documentId)
-            throws InterruptedException {
-        Thread.sleep(Duration.ofMillis(200));
-        return "This is the main content of document " + documentId +
-                " with multiple sentences and important information.";
+    private String fetchBody(String documentId) throws InterruptedException {
+        Thread.sleep(Duration.ofSeconds(10));
+        return "This is the main content of document " + documentId;
     }
 
-    private String fetchMetadata(String documentId)
-            throws InterruptedException {
-        Thread.sleep(Duration.ofMillis(150));
+    private String fetchMetadata(String documentId) throws InterruptedException {
+        Thread.sleep(Duration.ofSeconds(10));
         return "Created: 2024-01-01, Author: John Doe";
     }
 
-    private Integer countWords(String content)
-            throws InterruptedException {
+//    private String fetchHeader(String documentId)
+//            throws InterruptedException {
+//        Thread.sleep(Duration.ofMillis(100));
+//        return "Header for document " + documentId;
+//    }
+//
+//    private String fetchBody(String documentId)
+//            throws InterruptedException {
+//        Thread.sleep(Duration.ofMillis(200));
+//        return "This is the main content of document " + documentId +
+//                " with multiple sentences and important information.";
+//    }
+//
+//    private String fetchMetadata(String documentId)
+//            throws InterruptedException {
+//        Thread.sleep(Duration.ofMillis(150));
+//        return "Created: 2024-01-01, Author: John Doe";
+//    }
+
+    private Integer countWords(String content) throws InterruptedException {
         Thread.sleep(Duration.ofMillis(100));
         return content.split("\\s+").length;
     }
 
-    private String analyzeSentiment(String content)
-            throws InterruptedException {
+    private String analyzeSentiment(String content) throws InterruptedException {
         Thread.sleep(Duration.ofMillis(200));
         return content.toLowerCase().contains("important") ? "Positive" : "Neutral";
     }

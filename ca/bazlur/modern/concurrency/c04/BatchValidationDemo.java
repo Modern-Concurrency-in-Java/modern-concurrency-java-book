@@ -2,6 +2,8 @@ package ca.bazlur.modern.concurrency.c04;
 
 import module java.base;
 
+import ca.bazlur.modern.concurrency.c04.model.ValidatedUser;
+
 import java.util.concurrent.StructuredTaskScope.FailedException;
 import java.util.concurrent.StructuredTaskScope.Joiner;
 import java.util.concurrent.StructuredTaskScope.Subtask;
@@ -35,16 +37,14 @@ public class BatchValidationDemo {
         }
     }
 
-    private ValidatedUser validateUser(long userId)
-            throws InterruptedException {
+    private ValidatedUser validateUser(long userId) throws InterruptedException {
         log(" -> Validating user %d...".formatted(userId));
         Thread.sleep(Duration.ofMillis(100 + new Random().nextInt(500))); // ①
         log(" <- User %d is valid.".formatted(userId));
         return new ValidatedUser(userId, "VALID");
     }
 
-    private ValidatedUser validateUserWithFailure(long userId)
-            throws InterruptedException {
+    private ValidatedUser validateUserWithFailure(long userId) throws InterruptedException {
         if (userId == 3L) {
             log(" -> Validating user %d... (will fail)".formatted(userId));
             throw new IllegalArgumentException("Invalid user ID: " + userId); // ②
@@ -52,8 +52,7 @@ public class BatchValidationDemo {
         return validateUser(userId);
     }
 
-    public List<ValidatedUser> validateAllUsers(List<Long> userIds)
-            throws InterruptedException {
+    public List<ValidatedUser> validateAllUsers(List<Long> userIds) throws InterruptedException {
         log("Validating a batch of " + userIds.size() + " users...");
         try (var scope = open(Joiner.<ValidatedUser>allSuccessfulOrThrow())) { // ①
 
@@ -75,8 +74,4 @@ public class BatchValidationDemo {
                     ex.getCause()); // ⑤
         }
     }
-
-    public record ValidatedUser(long userId, String status) {
-    }
-
 }

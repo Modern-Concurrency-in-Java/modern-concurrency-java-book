@@ -81,9 +81,6 @@ public class RacePolicyDemo {
         }
     }
 
-    record Product(Long id, String name) {
-    }
-
-    record Review(Long id, String comment, int rating, Long productId) {
+    record Product(Long productId, String source) {
     }
 }

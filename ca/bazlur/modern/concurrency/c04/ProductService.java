@@ -1,5 +1,10 @@
 package ca.bazlur.modern.concurrency.c04;
 
+import ca.bazlur.modern.concurrency.c04.exception.ProductServiceException;
+import ca.bazlur.modern.concurrency.c04.model.Product;
+import ca.bazlur.modern.concurrency.c04.model.ProductInfo;
+import ca.bazlur.modern.concurrency.c04.model.Review;
+
 import java.time.Duration;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -73,6 +78,25 @@ public class ProductService {
                 "A great product description.");
     }
 
+//    private Product fetchProduct(Long productId) {
+//        log("Fetching product id: " + productId);
+//        if (productId == 1L) {
+//            log("Product id: " + productId
+//                    + " - simulating long network call (5 seconds).");
+//            sleepForAWhile(Duration.ofSeconds(5));
+//            log("Product id: " + productId + " fetch complete.");
+//            return new Product(productId,
+//                    "Long-Fetched Product", "This product takes time to fetch.");
+//        }
+//
+//        log("Product id: " + productId +
+//                " - simulating standard network call (1 second).");
+//        sleepForAWhile(Duration.ofSeconds(1));
+//        log("Product id: " + productId + " fetch complete.");
+//        return new Product(productId, "Sample Product",
+//                "A great product description.");
+//    }
+
     private List<Review> fetchReviews(Long productId) {
         log("Fetching reviews for id: " + productId);
         sleepForAWhile(Duration.ofSeconds(2)); // Simulate network call
@@ -81,31 +105,33 @@ public class ProductService {
                 new Review(2L, "Good value.", 4, productId));
     }
 
+//    private List<Review> fetchReviews(Long productId) {
+//        log("Fetching reviews for id: " + productId);
+//        if (productId == 1L) {
+//            log("Reviews for id: " + productId
+//                    + " - simulating quick failure after 1 second.");
+//            sleepForAWhile(Duration.ofSeconds(1));
+//            throw new ProductServiceException("Simulated failure " +
+//                    "fetching reviews for product " + productId);
+//        }
+//
+//        log("Reviews for id: " + productId
+//                + " - simulating network call (2 seconds).");
+//        sleepForAWhile(Duration.ofSeconds(2));
+//        List<Review> reviews = List.of(
+//                new Review(1L, "Excellent!", 5, productId),
+//                new Review(2L, "Good value.", 4, productId)
+//        );
+//        log("Fetched reviews for id: " + productId);
+//        return reviews;
+//    }
+
     private void sleepForAWhile(Duration duration) {
         try {
             Thread.sleep(duration);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new RuntimeException("Thread interrupted during sleep", e);
-        }
-    }
-
-    record Product(Long id, String name, String description) {
-    }
-
-    record Review(Long id, String comment, int rating, Long productId) {
-    }
-
-    record ProductInfo(Product product, List<Review> reviews) {
-    }
-
-    class ProductServiceException extends RuntimeException {
-        public ProductServiceException(String message, Throwable cause) {
-            super(message, cause);
-        }
-
-        public ProductServiceException(String message) {
-            super(message);
         }
     }
 }

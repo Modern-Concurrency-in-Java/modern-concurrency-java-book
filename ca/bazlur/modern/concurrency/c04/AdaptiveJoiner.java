@@ -2,8 +2,7 @@ package ca.bazlur.modern.concurrency.c04;
 
 import module java.base;
 
-public class AdaptiveJoiner<T>
-        implements StructuredTaskScope.Joiner<T, CollectingJoiner.Result<T>> {
+public class AdaptiveJoiner<T> implements StructuredTaskScope.Joiner<T, CollectingJoiner.Result<T>> {
 
     private final int minSampleSize;
     private final double maxFailureRate;

@@ -2,11 +2,14 @@ package ca.bazlur.modern.concurrency.c04;
 
 import module java.base;
 
+import ca.bazlur.modern.concurrency.c04.model.BackupResult;
+
 import static ca.bazlur.modern.concurrency.c04.Utils.log;
 import static java.util.concurrent.StructuredTaskScope.Joiner;
 import static java.util.concurrent.StructuredTaskScope.open;
 
 public class BackupDemo {
+
     private final AtomicBoolean hasSuccess = new AtomicBoolean(false);
 
     void main() {
@@ -31,7 +34,6 @@ public class BackupDemo {
             scope.fork(() -> backupToCloud(data)); // ②
             scope.fork(() -> backupToUSB(data)); // ③
             scope.fork(() -> backupToNetwork(data)); // ④
-
             scope.join(); // ⑤
 
             if (hasSuccess.get()) {
@@ -82,8 +84,5 @@ public class BackupDemo {
             log(" <- Network backup failed");
             return new BackupResult("Network", false);
         }
-    }
-
-    public record BackupResult(String location, boolean success) {
     }
 }

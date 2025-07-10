@@ -2,8 +2,7 @@ package ca.bazlur.modern.concurrency.c04;
 
 import module java.base;
 
-public class ConditionalJoiner<T>
-        implements StructuredTaskScope.Joiner<T, List<T>> {
+public class ConditionalJoiner<T> implements StructuredTaskScope.Joiner<T, List<T>> {
 
     private final Supplier<Boolean> shouldContinue;                     // ①
     private final Queue<T> results = new ConcurrentLinkedQueue<>();

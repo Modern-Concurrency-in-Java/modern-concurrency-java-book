@@ -22,11 +22,9 @@ public class TimeoutExample {
 
             // If timeout expires before join() completes,
             // TimeoutException is thrown
-            var results = scope.join() // ③
+            return scope.join() // ③
                     .map(Subtask::get)
                     .toList();
-
-            return results;
         }
     }
 

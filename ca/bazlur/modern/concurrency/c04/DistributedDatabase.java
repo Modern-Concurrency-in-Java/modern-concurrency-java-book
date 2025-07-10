@@ -33,8 +33,7 @@ public class DistributedDatabase {
         }
     }
 
-    private Boolean writeToNode(String node, String key, String value)
-            throws InterruptedException {
+    private Boolean writeToNode(String node, String key, String value) throws InterruptedException {
         log("Writing to " + node);
         Thread.sleep(Duration.ofMillis(100 + new Random().nextInt(200)));  // ⑥
         // Simulate occasional node failures
@@ -50,7 +49,6 @@ public class DistributedDatabase {
 
     void main() {
         var database = new DistributedDatabase();
-
         try {
             boolean result = database.writeData("user:123", "John Doe");  // ⑧
             log("\nFinal result: " + (result ? "SUCCESS" : "FAILURE"));

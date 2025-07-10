@@ -13,7 +13,7 @@ public class ResilientServer {
     private final AtomicInteger connectionCount = new AtomicInteger(0);
     private final AtomicInteger activeConnections = new AtomicInteger(0);
 
-    // todo: replace `main` with actual code from the book
+    // todo: added this method for demonstration. didn't find it in the book
     void main() {
         try {
             ServerSocket socket = new ServerSocket(8080);

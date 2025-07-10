@@ -2,6 +2,8 @@ package ca.bazlur.modern.concurrency.c04;
 
 import module java.base;
 
+import ca.bazlur.modern.concurrency.c04.model.ServiceResponse;
+
 import static ca.bazlur.modern.concurrency.c04.Utils.log;
 import static java.util.concurrent.StructuredTaskScope.*;
 
@@ -49,9 +51,5 @@ public class SubtaskExceptionHandling {
             throws IOException, TimeoutException, InterruptedException {
         Thread.sleep(Duration.ofMillis(100));
         return "Data from " + service;
-    }
-
-    public record ServiceResponse(String service, String data,
-                                  boolean successful) {
     }
 }

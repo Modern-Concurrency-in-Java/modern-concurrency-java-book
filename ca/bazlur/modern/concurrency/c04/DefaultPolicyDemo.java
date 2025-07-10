@@ -1,5 +1,7 @@
 package ca.bazlur.modern.concurrency.c04;
 
+import ca.bazlur.modern.concurrency.c04.exception.ProductServiceException;
+
 import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
@@ -115,7 +117,7 @@ public class DefaultPolicyDemo {
         return List.of(new Review("Inaya", 5), new Review("Rushda", 4));
     }
 
-    record Product(long productId, String name) {
+    record Product(long productId, String source) {
     }
 
     record Review(String user, int rating) {
@@ -123,15 +125,4 @@ public class DefaultPolicyDemo {
 
     record ProductInfo(Product product, List<Review> reviews) {
     }
-
-    class ProductServiceException extends RuntimeException {
-        public ProductServiceException(String message, Throwable cause) {
-            super(message, cause);
-        }
-
-        public ProductServiceException(String message) {
-            super(message);
-        }
-    }
-
 }
