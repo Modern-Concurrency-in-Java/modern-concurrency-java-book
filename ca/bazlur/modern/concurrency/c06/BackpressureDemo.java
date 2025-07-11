@@ -45,7 +45,7 @@ public class BackpressureDemo {
                 .publishOn(Schedulers.boundedElastic())  // ④
                 .take(Duration.ofSeconds(1))
                 .subscribe(price -> {
-                    Thread.sleep(10); // Simulate slow processing
+                    simulateWork(10);  // Simulate slow processing
                     System.out.printf("[PROCESSED] Price: $%.2f%n", price.price());
                 });
 
@@ -57,10 +57,22 @@ public class BackpressureDemo {
                 .onBackpressureLatest()
                 .publishOn(Schedulers.boundedElastic())
                 .subscribe(price -> {
-                    Thread.sleep(100); // Very slow processing
+                    simulateWork(10);  // Very slow processing
                     System.out.printf("[LATEST] Price: $%.2f%n", price.price());
                 });
 
         Thread.sleep(2000);
+    }
+
+    private static void simulateWork(int millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException(e);
+        }
+    }
+
+    public record PriceData(String exchange, String symbol, double price, Instant timestamp) {
     }
 }

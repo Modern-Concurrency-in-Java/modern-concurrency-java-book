@@ -1,6 +1,9 @@
 package ca.bazlur.modern.concurrency.c06;
 
 import module java.base;
+import ca.bazlur.modern.concurrency.c06.model.PriceAlert;
+import ca.bazlur.modern.concurrency.c06.model.PriceData;
+
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Sinks;
 

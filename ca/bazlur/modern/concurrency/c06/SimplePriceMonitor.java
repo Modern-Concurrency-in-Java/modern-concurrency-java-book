@@ -1,5 +1,6 @@
 package ca.bazlur.modern.concurrency.c06;
 
+import ca.bazlur.modern.concurrency.c06.model.PriceData;
 import reactor.core.publisher.Flux;
 
 import java.time.Duration;

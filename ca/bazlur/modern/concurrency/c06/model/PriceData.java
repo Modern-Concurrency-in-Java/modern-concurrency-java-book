@@ -1,4 +1,4 @@
-package ca.bazlur.modern.concurrency.c06;
+package ca.bazlur.modern.concurrency.c06.model;
 
 import java.time.Instant;
 

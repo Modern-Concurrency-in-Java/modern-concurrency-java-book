@@ -6,7 +6,11 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.http.HttpRequest;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -72,6 +76,55 @@ public class MultithreadedHttpServer {
         } catch (Exception e) {
             System.err.println("Connection error from " + clientAddr +
                     ": " + e.getMessage());
+        }
+    }
+
+    private static void sendResponse(PrintWriter out,
+                                     HttpRequest request,
+                                     int requestId,
+                                     boolean keepAlive) {
+        // Send HTTP response
+        out.println("HTTP/1.1 200 OK");
+        out.println("Content-Type: text/plain");
+        out.println("Connection: " + (keepAlive ? "keep-alive" : "close"));
+
+        String body = String.format(
+                "Request #%d processed\nPath: %s\nTime: %s\n",
+                requestId, request.path, Instant.now());
+
+        out.println("Content-Length: " + body.length());
+        out.println(); // Empty line between headers and body
+        out.print(body);
+        out.flush(); //⑥
+    }
+
+    static void processRequest(HttpRequest request)
+            throws IOException {
+        try {
+            if (request.path.startsWith("/slow")) {
+                Thread.sleep(Duration.of(30, ChronoUnit.SECONDS)); // ⑦
+                System.out.println("  Slow request processed");
+            } else if (request.path.startsWith("/medium")) {
+                Thread.sleep(Duration.of(500, ChronoUnit.MILLIS));
+                System.out.println("  Medium request processed");
+            } else {
+                Thread.sleep(Duration.of(100, ChronoUnit.MILLIS));
+                System.out.println("  Fast request processed");
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+
+    static class HttpRequest {
+        String method;
+        String path;
+        String version;
+        Map<String, String> headers = new HashMap<>();
+        String remainingBuffer; // For non-blocking server
+
+        String getHeader(String name) {
+            return headers.get(name.toLowerCase());
         }
     }
 }

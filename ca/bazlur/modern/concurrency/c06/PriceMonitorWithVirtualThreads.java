@@ -1,5 +1,9 @@
 package ca.bazlur.modern.concurrency.c06;
 
+import ca.bazlur.modern.concurrency.c06.enumeration.AlertType;
+import ca.bazlur.modern.concurrency.c06.model.PriceAlert;
+import ca.bazlur.modern.concurrency.c06.model.PriceData;
+
 import java.time.Instant;
 import java.util.LinkedList;
 import java.util.List;
@@ -8,15 +12,13 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class PriceMonitorWithVirtualThreads {
-    private static final List<String> EXCHANGES = List.of("Binance", "Coinbase", "Kraken");
-    private static final List<String> SYMBOLS = List.of("BTC/USD", "ETH/USD", "SOL/USD");
 
-    private static final Map<String, AtomicReference<PriceData>> latestPrices =
-            new ConcurrentHashMap<>();
-    private static final BlockingQueue<PriceAlert> alertQueue =
-            new LinkedBlockingQueue<>();
-    private static final Map<String, LinkedList<Double>> priceWindows =
-            new ConcurrentHashMap<>();
+    private static final List<String> SYMBOLS = List.of("BTC/USD", "ETH/USD", "SOL/USD");
+    private static final List<String> EXCHANGES = List.of("Binance", "Coinbase", "Kraken");
+
+    private static final BlockingQueue<PriceAlert> alertQueue = new LinkedBlockingQueue<>();
+    private static final Map<String, LinkedList<Double>> priceWindows = new ConcurrentHashMap<>();
+    private static final Map<String, AtomicReference<PriceData>> latestPrices = new ConcurrentHashMap<>();
 
     public static void main(String[] args) throws InterruptedException {
         try (var executor = Executors.newVirtualThreadPerTaskExecutor()) { //①

@@ -2,17 +2,13 @@ package ca.bazlur.modern.concurrency.c06;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.net.http.HttpRequest;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.nio.charset.StandardCharsets;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -120,6 +116,7 @@ public class NonBlockingHttpServer {
             buffer = buffer.substring(requestEnd + 4);
 
             // Parse and process request asynchronously  //⑫
+            // todo: missing this method
             HttpRequest request = parseHttpRequest(requestData);
             if (request != null) {
                 int requestId = requestCounter.incrementAndGet();
@@ -188,6 +185,7 @@ public class NonBlockingHttpServer {
                 }
             }).thenRun(() -> {
                 // Add response to queue when ready ⑮
+                // todo: missing this method
                 String response = buildHttpResponse(request, requestId, state.keepAlive);
                 synchronized (state.responseQueue) {
                     state.responseQueue.offer(response);
@@ -198,6 +196,18 @@ public class NonBlockingHttpServer {
             System.out.println("  Fast request processed");
             String response = buildHttpResponse(request, requestId, state.keepAlive);
             state.responseQueue.offer(response);
+        }
+    }
+
+    static class HttpRequest {
+        String method;
+        String path;
+        String version;
+        Map<String, String> headers = new HashMap<>();
+        String remainingBuffer; // For non-blocking server
+
+        String getHeader(String name) {
+            return headers.get(name.toLowerCase());
         }
     }
 
