@@ -1,5 +1,7 @@
 package ca.bazlur.modern.concurrency.c05;
 
+import ca.bazlur.modern.concurrency.c05.model.Transaction;
+
 public class FlattenedTransactionExample {
     private static final ScopedValue<Transaction> CURRENT_TRANSACTION =
             ScopedValue.newInstance();
@@ -40,8 +42,5 @@ public class FlattenedTransactionExample {
     private static void performDatabaseOperation() {
         Transaction tx = CURRENT_TRANSACTION.get();
         System.out.println("    Executing in transaction: " + tx.name()); //④
-    }
-
-    record Transaction(String name) {
     }
 }

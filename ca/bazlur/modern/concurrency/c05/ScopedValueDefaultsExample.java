@@ -1,8 +1,7 @@
 package ca.bazlur.modern.concurrency.c05;
 
 public class ScopedValueDefaultsExample {
-    private static final ScopedValue<String> USER_NAME
-            = ScopedValue.newInstance();
+    private static final ScopedValue<String> USER_NAME = ScopedValue.newInstance();
 
     public static void main(String[] args) {
         // Using orElse for default values

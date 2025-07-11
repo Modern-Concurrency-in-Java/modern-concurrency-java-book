@@ -1,10 +1,8 @@
 package ca.bazlur.modern.concurrency.c05;
 
 public class MultiScopedExample {
-    private static final ScopedValue<String> USER_ID
-            = ScopedValue.newInstance();
-    private static final ScopedValue<String> SESSION_ID
-            = ScopedValue.newInstance();
+    private static final ScopedValue<String> USER_ID = ScopedValue.newInstance();
+    private static final ScopedValue<String> SESSION_ID = ScopedValue.newInstance();
 
     public static void main(String[] args) {
         ScopedValue.where(USER_ID, "user123") //①

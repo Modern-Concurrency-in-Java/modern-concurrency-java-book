@@ -1,9 +1,9 @@
 package ca.bazlur.modern.concurrency.c05;
 
 // todo: merged all ScopedValue examples here
-public class ScopedValueExample {
-    public static void main(String[] args) throws InterruptedException {
+public class ScopedValueExamples {
 
+    public static void main(String[] args) throws InterruptedException {
         ScopedValue<String> NAME = ScopedValue.newInstance();
 
         Runnable task = () -> {
@@ -14,11 +14,12 @@ public class ScopedValueExample {
             }
         };
 
-        // todo: added the following comments
         task.run();  // unbounded
 
+        // Execute within scope
         ScopedValue.where(NAME, "Bazlur").run(task);  // bounded
 
+        // Try to execute outside scope
         task.run();  // unbounded
 
         Thread thread = Thread.ofPlatform().unstarted(task);
