@@ -18,7 +18,7 @@ public class WebCrawlerWithCircuitBreaker {
     private double systemFailureRate = 0.1; // Start with 10% failure rate
     private final Random random = new Random();
 
-    public static void main(String[] args) {
+    void main() {
         var crawler = new WebCrawlerWithCircuitBreaker();
 
         try {

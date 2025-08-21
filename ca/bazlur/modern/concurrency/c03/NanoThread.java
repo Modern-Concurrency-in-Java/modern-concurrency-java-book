@@ -6,9 +6,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class NanoThread {
 
-    public static final NanoThreadScheduler NANO_THREAD_SCHEDULER = new NanoThreadScheduler();
-    private static final AtomicInteger COUNTER = new AtomicInteger(1);
-    public static final ContinuationScope SCOPE = new ContinuationScope("nanoThreadScope");
+    public static final NanoThreadScheduler NANO_THREAD_SCHEDULER
+                            = new NanoThreadScheduler();
+    private static final AtomicInteger COUNTER
+                            = new AtomicInteger(1);
+    public static final ContinuationScope SCOPE
+                            = new ContinuationScope("nanoThreadScope");
 
     private final Continuation continuation;
     private final int nid;

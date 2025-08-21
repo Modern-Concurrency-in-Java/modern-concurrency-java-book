@@ -37,10 +37,5 @@ public class ParallelExecutionDemo {
                 throw new RuntimeException(e);
             }
         });
-
-        System.out.println("\n=== Performance Analysis ===");
-        System.out.println("Sequential: ~1000ms (5 × 200ms)");
-        System.out.println("Parallel: ~600ms (200ms + max(200ms, 200ms, 200ms) + 200ms)");
-        System.out.println("Improvement: ~38% faster");
     }
 }

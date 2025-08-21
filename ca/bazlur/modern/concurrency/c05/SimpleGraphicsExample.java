@@ -5,8 +5,10 @@ import java.awt.Color;
 public class SimpleGraphicsExample {
 
     // Drawing context as ScopedValues
-    private static final ScopedValue<Color> DRAW_COLOR = ScopedValue.newInstance();   // ①
-    private static final ScopedValue<Integer> LINE_WIDTH = ScopedValue.newInstance();
+    private static final ScopedValue<Color> DRAW_COLOR
+                              = ScopedValue.newInstance();   // ①
+    private static final ScopedValue<Integer> LINE_WIDTH
+                              = ScopedValue.newInstance();
 
     // Simulated drawing methods
     static void drawLine(String from, String to) {

@@ -40,6 +40,7 @@ public class SimpleThreadPool implements AutoCloseable {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
+                return; // exit gracefully
             }
         }
         shutdown();
@@ -57,6 +58,8 @@ public class SimpleThreadPool implements AutoCloseable {
                     Runnable task = queue.take();
                     task.run();
                 } catch (InterruptedException e) {
+                    // pool doesn’t use interrupts for shutdown;
+                    // if ever interrupted, just exit
                     Thread.currentThread().interrupt();
                 }
             }
