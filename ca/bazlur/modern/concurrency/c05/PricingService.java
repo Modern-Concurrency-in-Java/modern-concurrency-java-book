@@ -1,7 +1,8 @@
 package ca.bazlur.modern.concurrency.c05;
 
 public class PricingService {
-    private static final ScopedValue<Double> DISCOUNT_RATE = ScopedValue.newInstance();
+    private static final ScopedValue<Double> DISCOUNT_RATE
+                                    = ScopedValue.newInstance();
 
     public double calculatePrice(double basePrice) {
         // Using call() to return the calculated price from within the scope

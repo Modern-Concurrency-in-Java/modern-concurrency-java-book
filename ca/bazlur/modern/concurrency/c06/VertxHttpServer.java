@@ -54,7 +54,8 @@ public class VertxHttpServer extends AbstractVerticle {
                 .put("totalRequests", requestCounter.get())
                 .put("uptimeMillis", uptimeMillis)
                 .put("currentThread", Thread.currentThread().getName())
-                .put("isEventLoopThread", Vertx.currentContext().isEventLoopContext()); //⑥
+                .put("isEventLoopThread", Vertx.currentContext()
+                                    .isEventLoopContext()); //⑥
 
         ctx.response()
                 .putHeader("content-type", "application/json")

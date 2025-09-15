@@ -49,13 +49,13 @@ public class NewsAggregator {
 
             log("\n=== Results ===");
             result.successes()                                       // ⑤
-                    .forEach(headline -> log("✓ " + headline));
+                    .forEach(headline -> log(headline));
 
             if (result.hasFailures()) {                             // ⑥
                 log("\n=== Failures ===");
                 result.failures()
                         .forEach(error ->
-                                log("✗ " + error.getMessage()));
+                                log(error.getMessage()));
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();

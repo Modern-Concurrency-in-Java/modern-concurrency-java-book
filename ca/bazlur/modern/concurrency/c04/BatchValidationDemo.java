@@ -64,7 +64,7 @@ public class BatchValidationDemo {
             // or throws FailedException on the first failure
             var resultStream = scope.join(); // ③
 
-            log("...All users validated successfully. Processing stream...");
+            log("All users validated successfully. Processing stream");
             return resultStream
                     .map(Subtask::get) // ④
                     .toList();

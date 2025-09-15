@@ -15,6 +15,7 @@ public class RemoteApiService {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
-        return CompletableFuture.completedFuture("Data fetched using virtual thread");
+        return CompletableFuture
+            .completedFuture("Data fetched using virtual thread");
     }
 }

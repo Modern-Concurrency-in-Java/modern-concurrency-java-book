@@ -41,7 +41,7 @@ public class ThreadDumpDemo {
     try {
       // Ensure that the output file path is absolute
       if (!new File(outputFile).isAbsolute()) {
-        throw new IllegalArgumentException("The output file path must be absolute.");
+        throw new IllegalArgumentException("Output path must be absolute.");
       }
       hotSpotDiagnosticMXBean.dumpThreads(outputFile,
           HotSpotDiagnosticMXBean.ThreadDumpFormat.JSON);
@@ -59,9 +59,13 @@ public class ThreadDumpDemo {
   }
 
   private static void runJcmdDump(long pid, String file) {
+    if (!new File(file).isAbsolute()) {
+      throw new IllegalArgumentException("Output path must be absolute.");
+    }
     ProcessBuilder pb = new ProcessBuilder(List.of(
         "/bin/sh", "-c",
-        String.format("jcmd %d Thread.dump_to_file -format=json %s", pid, file))); // ④
+        String.format("jcmd %d Thread.dump_to_file -format=json %s",
+            pid, file))); // ④
     try {
       Process p = pb.start();
       int exit = p.waitFor();

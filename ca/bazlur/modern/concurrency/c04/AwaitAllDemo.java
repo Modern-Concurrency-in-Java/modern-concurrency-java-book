@@ -14,10 +14,10 @@ public class AwaitAllDemo {
 
     void main() {
         String criticalAlert = "URGENT: Database connection pool exhausted - " +
-                "immediate attention required";
-        log("--- Running Notification Scenario (awaitAll Policy) ---");
+            "immediate attention required";
+        log("Running Notification Scenario (awaitAll Policy)");
         log("This demonstrates how awaitAll() processes " +
-                "ALL tasks regardless of failures\n");
+            "ALL tasks regardless of failures\n");
 
         try {
             sendCriticalAlert(criticalAlert); // ①
@@ -30,8 +30,8 @@ public class AwaitAllDemo {
 
         try {
             sendCriticalAlert(
-                    "RESOLVED: Database issue fixed - " +
-                            "all systems operational"); // ②
+                "RESOLVED: Database issue fixed - " +
+                    "all systems operational"); // ②
         } catch (Exception e) {
             log("Caught exception: " + e.getMessage());
         }
@@ -57,7 +57,7 @@ public class AwaitAllDemo {
                 return null;
             });
 
-            log("...Waiting for all notification attempts to complete...");
+            log("Waiting for all notification attempts to complete");
             // join() always returns null for awaitAll()
             // All tasks complete regardless of individual failures
             Void result = scope.join(); // ③
@@ -82,12 +82,12 @@ public class AwaitAllDemo {
         if (new Random().nextDouble() < 0.9) { // ①
             log(" <- Email sent successfully");
             notificationResults.add(
-                    NotificationResult.success("EMAIL", "Delivered to inbox"));
+                NotificationResult.success("EMAIL", "Delivered to inbox"));
             successCount.incrementAndGet();
         } else {
             log(" <- Email failed: SMTP server unavailable");
             notificationResults.add(
-                    NotificationResult.failure("EMAIL", "SMTP server unavailable"));
+                NotificationResult.failure("EMAIL", "SMTP server unavailable"));
             failureCount.incrementAndGet();
             throw new RuntimeException("Email delivery failed"); // ②
         }
@@ -101,12 +101,12 @@ public class AwaitAllDemo {
         if (new Random().nextDouble() < 0.7) { // ③
             log(" <- SMS sent successfully");
             notificationResults.add(
-                    NotificationResult.success("SMS", "Delivered to mobile"));
+                NotificationResult.success("SMS", "Delivered to mobile"));
             successCount.incrementAndGet();
         } else {
             log(" <- SMS failed: Carrier gateway timeout");
             notificationResults.add(
-                    NotificationResult.failure("SMS", "Carrier gateway timeout"));
+                NotificationResult.failure("SMS", "Carrier gateway timeout"));
             failureCount.incrementAndGet();
             throw new RuntimeException("SMS delivery failed");
         }
@@ -120,12 +120,12 @@ public class AwaitAllDemo {
         if (new Random().nextDouble() < 0.95) { // ④
             log(" <- Push notification sent successfully");
             notificationResults.add(
-                    NotificationResult.success("PUSH", "Delivered to device"));
+                NotificationResult.success("PUSH", "Delivered to device"));
             successCount.incrementAndGet();
         } else {
             log(" <- Push notification failed: Device token expired");
             notificationResults.add(
-                    NotificationResult.failure("PUSH", "Device token expired"));
+                NotificationResult.failure("PUSH", "Device token expired"));
             failureCount.incrementAndGet();
             throw new RuntimeException("Push notification delivery failed");
         }
@@ -145,13 +145,14 @@ public class AwaitAllDemo {
 
         if (successCount.get() > 0) {
             log("\n🎯 Alert successfully delivered through " +
-                    successCount.get() + " channel(s)");
+                successCount.get() + " channel(s)");
         } else {
             log("\n⚠️  Alert failed to deliver through any channel!");
         }
     }
 
-    public record NotificationResult(String channel, boolean success, String message) {
+    public record NotificationResult(String channel, boolean success,
+                                     String message) {
         public static NotificationResult success(String channel, String message) {
             return new NotificationResult(channel, true, message);
         }

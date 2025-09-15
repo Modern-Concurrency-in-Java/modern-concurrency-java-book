@@ -21,7 +21,7 @@ public class SimplePriceMonitor {
         // Process the stream ③
         priceStream
                 .filter(price -> price.price() > 50200) //④
-                .map(price -> String.format("Alert: BTC price $%.2f exceeds threshold!",
+                .map(price -> String.format("BTC price $%.2f exceeds threshold!",
                         price.price())) //⑤
                 .subscribe(
                         alert -> System.out.println(alert), //⑥

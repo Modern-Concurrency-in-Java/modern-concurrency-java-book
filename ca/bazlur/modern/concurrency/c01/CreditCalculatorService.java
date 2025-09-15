@@ -66,16 +66,27 @@ public class CreditCalculatorService {
         }
     }
 
-    public Credit calculateCreditWithCompletableFuture(Long personId) throws InterruptedException, ExecutionException {
-        return runAsync(() -> importantWork()) // ①
-                .thenCompose(aVoid -> supplyAsync(() -> getPerson(personId))) // ②
-                .thenCombineAsync(supplyAsync(() -> getAssets(getPerson(personId))), // ③
-                        (person, assets) -> calculateCredits(assets, getLiabilities(person))) // ④
-                .get(); // ⑤
-    }
+//    public Credit calculateCreditWithCompletableFuture(Long personId)
+//        throws InterruptedException, ExecutionException {
+//        return runAsync(() -> importantWork()) // ①
+//                .thenCompose(aVoid -> supplyAsync(() -> getPerson(personId))) // ②
+//                .thenCombineAsync(supplyAsync(() -> getAssets(getPerson(personId))), // ③
+//                        (person, assets) -> calculateCredits(assets, getLiabilities(person))) // ④
+//                .get(); // ⑤
+//    }
 
+
+    public Credit calculateCreditWithCompletableFuture(Long personId)
+        throws InterruptedException, ExecutionException {
+        return runAsync(() -> importantWork())
+            .thenCompose(aVoid -> supplyAsync(() -> getPerson(personId)))
+            .thenCombineAsync(supplyAsync(() -> getAssets(getPerson(personId))),
+                (person, assets)
+                    -> calculateCredits(assets, getLiabilities(person)))
+            .get();
+    }
     public Credit calculateCreditWithVirtualThread(Long personId) throws ExecutionException, InterruptedException {
-        try (ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor()) { // ①
+        try (var executor = Executors.newVirtualThreadPerTaskExecutor()) { // ①
             var person = getPerson(personId);
             var assetsFuture = executor.submit(() -> getAssets(person));
             var liabilitiesFuture = executor.submit(() -> getLiabilities(person));
@@ -110,10 +121,13 @@ public class CreditCalculatorService {
         System.out.println("Important work completed");
     }
 
-    private Credit calculateCredits(List<Asset> assets, List<Liability> liabilities) {
+    private Credit calculateCredits(List<Asset> assets,
+                                    List<Liability> liabilities) {
         simulateDelay(200);
         double totalAssets = assets.stream().mapToDouble(Asset::value).sum();
-        double totalLiabilities = liabilities.stream().mapToDouble(Liability::amount).sum();
+        double totalLiabilities = liabilities.stream()
+            .mapToDouble(Liability::amount)
+            .sum();
         double creditScore = (totalAssets - totalLiabilities) / 1000;
         return new Credit(creditScore);
     }

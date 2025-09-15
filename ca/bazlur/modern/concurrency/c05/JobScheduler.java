@@ -4,7 +4,8 @@ import ca.bazlur.modern.concurrency.c05.enumeration.Priority;
 import ca.bazlur.modern.concurrency.c05.model.JobContext;
 
 public class JobScheduler {
-    private static final ScopedValue<JobContext> CONTEXT = ScopedValue.newInstance(); //①
+    private static final ScopedValue<JobContext> CONTEXT
+                                            = ScopedValue.newInstance(); //①
 
     public void schedule(Job job, String jobName, Priority priority) {
         JobContext context = new JobContext(jobName, priority); //②

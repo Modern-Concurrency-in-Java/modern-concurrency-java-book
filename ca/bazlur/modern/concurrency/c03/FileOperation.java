@@ -15,7 +15,8 @@ public class FileOperation {
     public void transfer(String filePath) {
         System.out.println("Start transferring file: " + filePath);
         NanoThread nanoThread = NanoThread.currentVThread();
-        IO_EVENT_SCHEDULER.schedule(() -> NANO_THREAD_SCHEDULER.schedule(nanoThread),
+        IO_EVENT_SCHEDULER.schedule(() ->
+                NANO_THREAD_SCHEDULER.schedule(nanoThread),
                 random.nextInt(1000), TimeUnit.MILLISECONDS);
         CURRENT_NANO_THREAD.remove();
         Continuation.yield(SCOPE);

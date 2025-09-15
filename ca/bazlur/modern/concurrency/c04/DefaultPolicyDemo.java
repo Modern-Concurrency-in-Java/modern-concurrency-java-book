@@ -20,7 +20,8 @@ public class DefaultPolicyDemo {
             ProductInfo result = demo.fetchProductInfo(123L, false); // ①
             log("\nSuccess! Result: " + result);
         } catch (Exception e) {
-            log("\nCaught unexpected exception in success scenario: " + e.getMessage());
+            log("\nCaught unexpected exception in success scenario: " +
+                "" + e.getMessage());
         }
 
         // todo: decide whether merging success and failure scenario is intended

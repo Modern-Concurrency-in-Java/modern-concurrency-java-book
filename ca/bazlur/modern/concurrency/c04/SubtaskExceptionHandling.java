@@ -11,7 +11,8 @@ public class SubtaskExceptionHandling {
 
     public List<ServiceResponse> gatherOptionalData(List<String> services)
             throws InterruptedException {
-        try (var scope = open(Joiner.<ServiceResponse>allSuccessfulOrThrow())) { // ①
+        try (var scope
+                 = open(Joiner.<ServiceResponse>allSuccessfulOrThrow())) { // ①
             var tasks = services.stream()
                     .map(service -> scope.fork(() ->
                             fetchWithDefaults(service))) // ②

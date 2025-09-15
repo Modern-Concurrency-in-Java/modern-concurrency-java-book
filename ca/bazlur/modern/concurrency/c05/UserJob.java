@@ -32,7 +32,8 @@ public class UserJob implements Job {
 //        System.out.println("User job is running!");
 //
 //        // User code calls back into the framework to retrieve metadata
-//        Object creationTime = jobScheduler.getJobMetadata("creationTime", context); // ⑤
+//        Object creationTime
+//                  = jobScheduler.getJobMetadata("creationTime", context);⑤
 //        System.out.println("Job creation time: " + creationTime);
 //
 //        // Any helper methods also need the context parameter

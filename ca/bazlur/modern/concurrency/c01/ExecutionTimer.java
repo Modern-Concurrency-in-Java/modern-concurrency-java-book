@@ -10,7 +10,8 @@ public class ExecutionTimer {
             return task.call();
         } finally {
             long endTime = System.nanoTime();
-            long duration = (endTime - startTime) / 1_000_000; // Convert to milliseconds
+            // Convert to milliseconds
+            long duration = (endTime - startTime) / 1_000_000;
             System.out.println("Execution time: " + duration + " milliseconds");
         }
     }

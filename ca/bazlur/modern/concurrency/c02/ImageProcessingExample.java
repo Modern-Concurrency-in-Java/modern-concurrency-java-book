@@ -33,7 +33,8 @@ public class ImageProcessingExample {
     }
 
     // Placeholder image transformation functions
-    static BufferedImage resizeImage(String url, int width, int height) throws Exception {
+    static BufferedImage resizeImage(String url, int width, int height)
+        throws Exception {
         // ... Logic to download and resize the image ...
         return null;
     }

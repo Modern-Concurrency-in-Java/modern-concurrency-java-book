@@ -23,33 +23,36 @@ public class LittleLawExample {
         };
 
         System.out.println("=== Little's Law Throughput Comparison ===");
-        System.out.println("Testing " + numTasks + " tasks with " + avgResponseTimeMillis + "ms latency each\n");
+        System.out.println("Testing " + numTasks + " tasks with "
+            + avgResponseTimeMillis + "ms latency each\n");
 
         benchmark("Virtual Threads",
-                Executors.newVirtualThreadPerTaskExecutor(), ioBoundTask, numTasks);
+            Executors.newVirtualThreadPerTaskExecutor(), ioBoundTask, numTasks);
         benchmark("Fixed ThreadPool (100)",
-                Executors.newFixedThreadPool(100), ioBoundTask, numTasks);
+            Executors.newFixedThreadPool(100), ioBoundTask, numTasks);
         benchmark("Fixed ThreadPool (500)",
-                Executors.newFixedThreadPool(500), ioBoundTask, numTasks);
+            Executors.newFixedThreadPool(500), ioBoundTask, numTasks);
         benchmark("Fixed ThreadPool (1000)",
-                Executors.newFixedThreadPool(1000), ioBoundTask, numTasks);
+            Executors.newFixedThreadPool(1000), ioBoundTask, numTasks);
     }
 
-    static void benchmark(String type, ExecutorService executor, Runnable task, int numTasks) {
+    static void benchmark(String type, ExecutorService executor, Runnable task,
+                          int numTasks) {
         Instant start = Instant.now(); // ④
         AtomicLong completedTasks = new AtomicLong();
 
         try (executor) { // ⑤
             IntStream.range(0, numTasks)
-                    .forEach(i -> executor.submit(() -> {
-                        task.run();
-                        completedTasks.incrementAndGet(); // ⑥
-                    }));
+                .forEach(i -> executor.submit(() -> {
+                    task.run();
+                    completedTasks.incrementAndGet(); // ⑥
+                }));
         } // ⑦
 
         Instant end = Instant.now();
         long duration = Duration.between(start, end).toMillis();
-        double throughput = (double) completedTasks.get() / duration * 1000; // Tasks per second // ⑧
+        // Tasks per second
+        double throughput = (double) completedTasks.get() / duration * 1000; // ⑧
 
         System.out.printf("%-25s - Time: %5dms, Throughput: %8.2f tasks/s%n", type, duration, throughput);
     }

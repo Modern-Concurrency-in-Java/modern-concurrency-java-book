@@ -10,23 +10,27 @@ import static java.util.concurrent.StructuredTaskScope.open;
 public class DocumentProcessor {
 
     private final ThreadFactory threadFactory = Thread.ofVirtual()
-            .name("doc-proc", 1)
-            .factory();
+        .name("doc-proc", 1)
+        .factory();
 
-    public DocumentReport processDocument(String documentId) throws InterruptedException {
-        try (var gatheringScope = open(StructuredTaskScope.Joiner.<String>allSuccessfulOrThrow(),
-                conf -> conf.withThreadFactory(threadFactory).withName("doc-gathering-scope"))) {            // ①
+    public DocumentReport processDocument(String documentId)
+        throws InterruptedException {
+        try (var gatheringScope
+                 = open(StructuredTaskScope.Joiner.<String>allSuccessfulOrThrow(),
+            conf -> conf.withThreadFactory(threadFactory)
+                .withName("doc-gathering-scope"))) {            // ①
 
             var headerTask = gatheringScope.fork(() ->
-                    fetchHeader(documentId));     // ②
+                fetchHeader(documentId));     // ②
             var bodyTask = gatheringScope.fork(() ->
-                    fetchBody(documentId));       // ③
+                fetchBody(documentId));       // ③
             var metadataTask = gatheringScope.fork(() ->
-                    fetchMetadata(documentId));   // ④
+                fetchMetadata(documentId));   // ④
 
             gatheringScope.join();                                          // ⑤
 
-            return analyzeContent(headerTask.get(), bodyTask.get(), metadataTask.get());
+            return analyzeContent(headerTask.get(),
+                                bodyTask.get(), metadataTask.get());
         } catch (StructuredTaskScope.FailedException e) {
             throw new RuntimeException("Failed to gather document content", e);
         }
@@ -34,7 +38,7 @@ public class DocumentProcessor {
 
     public void processWithErrorHandling(String documentId) {
         try (var scope = open(StructuredTaskScope.Joiner.<String>allSuccessfulOrThrow(),
-                cf -> cf.withName("error-prone-scope"))) {
+            cf -> cf.withName("error-prone-scope"))) {
 
             scope.fork(() -> {
                 if (new Random().nextBoolean()) {                              // ①
@@ -51,7 +55,7 @@ public class DocumentProcessor {
             try {
                 Path path = Path.of("./structured-concurrency-error.json");
                 bean.dumpThreads(path.toAbsolutePath().toString(),
-                        HotSpotDiagnosticMXBean.ThreadDumpFormat.JSON);            // ③
+                    HotSpotDiagnosticMXBean.ThreadDumpFormat.JSON);            // ③
 
                 System.out.println("Thread dump captured: " + path);
             } catch (IOException ex) {
@@ -70,7 +74,8 @@ public class DocumentProcessor {
 //        try (var gatheringScope = open(StructuredTaskScope.Joiner.
 //                <String>allSuccessfulOrThrow())) {                          // ①
 //
-//            var headerTask = gatheringScope.fork(() -> fetchHeader(documentId));     // ②
+//            var headerTask = gatheringScope.fork(() ->
+//                                          fetchHeader(documentId));     // ②
 //            var bodyTask = gatheringScope.fork(() -> fetchBody(documentId));        // ③
 //            var metadataTask = gatheringScope.fork(() -> fetchMetadata(documentId)); // ④
 //
@@ -87,10 +92,10 @@ public class DocumentProcessor {
     private DocumentReport analyzeContent(String header,
                                           String body,
                                           String metadata)
-            throws InterruptedException {
+        throws InterruptedException {
 
         try (var analysisScope = open(StructuredTaskScope.Joiner.
-                allSuccessfulOrThrow())) {                          // ①
+            allSuccessfulOrThrow())) {                          // ①
 
             var wordCountTask = analysisScope.fork(() -> countWords(body));                        // ②
             var sentimentTask = analysisScope.fork(() -> analyzeSentiment(body));                  // ③
@@ -99,9 +104,9 @@ public class DocumentProcessor {
             analysisScope.join();              // ⑤
 
             return new DocumentReport(
-                    wordCountTask.get(),
-                    sentimentTask.get(),
-                    summaryTask.get()
+                wordCountTask.get(),
+                sentimentTask.get(),
+                summaryTask.get()
             );
         } catch (StructuredTaskScope.FailedException e) {
             throw new RuntimeException("Failed to analyze document content", e);
@@ -153,7 +158,7 @@ public class DocumentProcessor {
     }
 
     private String generateSummary(String header, String body, String metadata)
-            throws InterruptedException {
+        throws InterruptedException {
         Thread.sleep(Duration.ofMillis(150));
         return header + ": " + body.substring(0, Math.min(50, body.length())) + "...";
     }
@@ -174,8 +179,8 @@ public class DocumentProcessor {
         @Override
         public String toString() {
             return String.format("Document Report:\n  Words: %d\n  " +
-                            "Sentiment: %s\n  Summary: %s",
-                    wordCount, sentiment, summary);
+                    "Sentiment: %s\n  Summary: %s",
+                wordCount, sentiment, summary);
         }
     }
 }
