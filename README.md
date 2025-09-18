@@ -6,6 +6,7 @@ Source code repository for the book "Modern Concurrency in Java" by A N M Bazlur
 
 - [O'Reilly Learning Platform](https://learning.oreilly.com/library/view/modern-concurrency-in/9781098165406/)
 - [O'Reilly Library](https://www.oreilly.com/library/view/modern-concurrency-in/9781098165406/)
+- [GitHub Repository](https://github.com/ModernConcurrency-in-Java)
 
 ## About
 
@@ -42,7 +43,20 @@ Each example class contains a `main` method that can be run independently. Navig
 
 ## License
 
-Please refer to the book for licensing information.
+This book's example code is offered for use in your programs and documentation. You do not need to contact us for permission unless you're reproducing a significant portion of the code. For example:
+
+- ✅ Writing a program that uses several chunks of code from this book does not require permission
+- ✅ Answering a question by citing this book and quoting example code does not require permission
+- ❌ Selling or distributing examples from O'Reilly books does require permission
+- ❌ Incorporating a significant amount of example code from this book into your product's documentation does require permission
+
+We appreciate, but generally do not require, attribution. An attribution usually includes the title, author, publisher, and ISBN:
+
+**"Modern Concurrency in Java by A N M Bazlur Rahman (O'Reilly). Copyright 2025 A N M Bazlur Rahman, 978-1-098-16541-3."**
+
+If you feel your use of code examples falls outside fair use or the permission given above, feel free to contact O'Reilly at permissions@oreilly.com.
+
+For technical questions or problems using the code examples, please send an email to support@oreilly.com.
 
 ## Author
 
