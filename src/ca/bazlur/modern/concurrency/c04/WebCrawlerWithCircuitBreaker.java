@@ -46,7 +46,8 @@ public class WebCrawlerWithCircuitBreaker {
             log("\n=== FINAL RESULTS ===");
             log("Successful fetches: " + result.successes().size());
             log("Failed fetches: " + result.failures().size());
-            log("Total processed: " + (result.successes().size() + result.failures().size()));
+            log("Total processed: " + (result.successes().size()
+                + result.failures().size()));
             log("Remaining URLs (not processed): " +
                     (urls.size() - result.successes().size() - result.failures().size()));
 

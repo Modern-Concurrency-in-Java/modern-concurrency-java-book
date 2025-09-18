@@ -13,5 +13,14 @@ public class Playground {
         });
       }
     }
+
+    try (var singleThreadPool = Executors.newSingleThreadExecutor()) {
+      for (int i = 0; i < 5; i++) {
+        singleThreadPool.submit(() -> {
+          System.out.println(Thread.currentThread().getName()
+              + " is executing a task");
+        });
+      }
+    }
   }
 }

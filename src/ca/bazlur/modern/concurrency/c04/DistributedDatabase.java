@@ -16,7 +16,7 @@ public class DistributedDatabase {
 
     public boolean writeData(String key, String value)
             throws InterruptedException {
-        log("Writing data to distributed database: " + key + "=" + value);
+        log("Writing data to distributed database:\n " + key + "=" + value);
 
         try (var scope = open(new QuorumJoiner<Boolean>(quorumSize))) {  // ③
 

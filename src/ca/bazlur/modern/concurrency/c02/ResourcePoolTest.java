@@ -7,37 +7,40 @@ import java.util.concurrent.*;
 
 public class ResourcePoolTest {
 
-    public static void main(String[] args) throws Exception {
-        int maxConcurrentThreads = 5;
-        int totalRequests = 50;
-        MonitoredResourcePool pool = new MonitoredResourcePool(maxConcurrentThreads);
+  public static void main(String[] args) throws Exception {
+    int maxConcurrentThreads = 5;
+    int totalRequests = 50;
+    var pool = new MonitoredResourcePool(maxConcurrentThreads);
 
-        List<Future<Optional<String>>> futures = new ArrayList<>();
+    var futures = new ArrayList<Future<Optional<String>>>();
 
-        try (ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor()) {
-            for (int i = 0; i < totalRequests; i++) {
-                final int taskId = i;
-                futures.add(executor.submit(() -> pool.useResource("Query " + taskId)));
-            }
+    try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
+      for (int i = 0; i < totalRequests; i++) {
+        final int taskId = i;
+        futures.add(executor.submit(() -> pool.useResource("Query " + taskId)));
+      }
 
-            int successCount = 0;
-            int timeoutCount = 0;
+      int successCount = 0;
+      int timeoutCount = 0;
 
-            for (Future<Optional<String>> future : futures) {
-                Optional<String> result = future.get();
-                if (result.isPresent()) {
-                    successCount++;
-                } else {
-                    timeoutCount++; // ①
-                }
-            }
-
-            System.out.printf("Total requests: %d%n", totalRequests);
-            System.out.printf("Successful: %d%n", successCount);
-            System.out.printf("Timed out: %d%n", timeoutCount);
-            System.out.printf("Peak concurrent connections: %d%n", pool.getPeakConnections()); // ②
-
-            assert pool.getPeakConnections() <= maxConcurrentThreads : "Peak connections exceeded limit!";
+      for (Future<Optional<String>> future : futures) {
+        Optional<String> result = future.get();
+        if (result.isPresent()) {
+          successCount++;
+        } else {
+          timeoutCount++; // ①
         }
+      }
+
+      System.out.printf("""
+              requests  : %d
+              successful: %d
+              timed-out : %d
+              peak usage: %d%n""",
+          totalRequests, successCount, timeoutCount, pool.getPeakConnections());// ②
+
+      assert pool.getPeakConnections() <= maxConcurrentThreads
+          : "Peak connections exceeded limit!";
     }
+  }
 }
