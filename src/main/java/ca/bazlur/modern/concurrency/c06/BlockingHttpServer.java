@@ -73,6 +73,36 @@ public class BlockingHttpServer {
         }
     }
 
+    private static HttpRequest parseRequest(BufferedReader in)
+            throws IOException {
+        String requestLine = in.readLine();
+        if (requestLine == null || requestLine.isBlank()) {
+            return null;
+        }
+
+        String[] requestParts = requestLine.split(" ");
+        if (requestParts.length < 3) {
+            return null;
+        }
+
+        HttpRequest request = new HttpRequest();
+        request.method = requestParts[0];
+        request.path = requestParts[1];
+        request.version = requestParts[2];
+
+        String line;
+        while ((line = in.readLine()) != null && !line.isBlank()) {
+            int idx = line.indexOf(':');
+            if (idx > 0) {
+                String name = line.substring(0, idx).trim().toLowerCase();
+                String value = line.substring(idx + 1).trim();
+                request.headers.put(name, value);
+            }
+        }
+
+        return request;
+    }
+
     private static void sendResponse(PrintWriter out,
                                      HttpRequest request,
                                      int requestId,

@@ -34,8 +34,16 @@ src/ca/bazlur/modern/concurrency/
 
 ## Requirements
 
-- Java 21 or higher (for Virtual Threads and other modern features)
-- TODO: Add Maven/Gradle dependencies and build configuration
+- Java 25 (early-access) with preview features enabled
+- Maven 3.9+
+
+## Build & Run with Maven
+
+The Maven build uses the standard layout (`src/main/java`) and enables Java preview features automatically.
+
+- Compile everything: `mvn -DskipTests compile`
+- Run an example: `mvn -Dexec.mainClass=ca.bazlur.modern.concurrency.c01.HelloWorld exec:java`
+  - Add `-Dexec.args="arg1 arg2"` if the sample accepts arguments.
 
 ## Running the Examples
 

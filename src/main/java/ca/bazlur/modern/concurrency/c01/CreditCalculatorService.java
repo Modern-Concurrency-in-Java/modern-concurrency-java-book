@@ -85,6 +85,7 @@ public class CreditCalculatorService {
                     -> calculateCredits(assets, getLiabilities(person)))
             .get();
     }
+
     public Credit calculateCreditWithVirtualThread(Long personId) throws ExecutionException, InterruptedException {
         try (var executor = Executors.newVirtualThreadPerTaskExecutor()) { // ①
             var person = getPerson(personId);
