@@ -36,7 +36,8 @@ public class TemplateProcessor {
 
       result.append(template, 0, includeStart);
       result.append(nestedContent);
-      result.append(template.substring(includeEnd + 2));
+      // Recursively process remaining part to handle multiple includes at same level
+      result.append(processTemplateInternal(template.substring(includeEnd + 2)));
     } else {
       result.append(template);
     }
