@@ -36,6 +36,28 @@ public class DocumentProcessor {
     }
   }
 
+//  public DocumentReport processDocument(String documentId)
+//          throws InterruptedException {
+//    try (var gatheringScope = open(
+//            StructuredTaskScope.Joiner.<String>allSuccessfulOrThrow(),
+//            conf -> conf.withThreadFactory(threadFactory)
+//                    .withName("doc-gathering-scope"))) { // ①
+//      var headerTask = gatheringScope.fork(() ->
+//              fetchHeader(documentId)); // ②
+//      var bodyTask = gatheringScope.fork(() ->
+//              fetchBody(documentId)); // ②
+//      var metadataTask = gatheringScope.fork(() ->
+//              fetchMetadata(documentId)); // ②
+//
+//      gatheringScope.join(); // ③
+//
+//      return analyzeContent(
+//              headerTask.get(), bodyTask.get(), metadataTask.get());
+//    } catch (StructuredTaskScope.FailedException e) {
+//      throw new RuntimeException("Failed to gather document content", e);
+//    }
+//  }
+
   private DocumentReport analyzeContent(String header,
                                         String body,
                                         String metadata)
