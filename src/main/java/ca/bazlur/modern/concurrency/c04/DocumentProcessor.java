@@ -58,6 +58,35 @@ public class DocumentProcessor {
 //    }
 //  }
 
+//  public void processWithErrorHandling(String documentId) {
+//    try (var scope = open(StructuredTaskScope.Joiner.
+//                    <String>allSuccessfulOrThrow(),
+//            cf -> cf.withName("error-prone-scope"))) {
+//      scope.fork(() -> {
+//        if (new Random().nextBoolean()) { // ①
+//          throw new RuntimeException("Simulated failure");
+//        }
+//        return fetchHeader(documentId);
+//      });
+//      scope.join();
+//    } catch (StructuredTaskScope.FailedException e) {
+//      HotSpotDiagnosticMXBean bean = ManagementFactory
+//              .getPlatformMXBean(HotSpotDiagnosticMXBean.class); // ②
+//      try {
+//        Path path = Path.of("./structured-concurrency-error.json");
+//        bean.dumpThreads(path.toAbsolutePath().toString(),
+//                HotSpotDiagnosticMXBean.ThreadDumpFormat.JSON); // ③
+//        System.out.println("Thread dump captured: " + path);
+//      } catch (IOException ex) {
+//        throw new RuntimeException("Failed to generate thread dump", ex);
+//      }
+//      throw new RuntimeException("Processing failed", e);
+//    } catch (InterruptedException e) {
+//      Thread.currentThread().interrupt();
+//      throw new RuntimeException("Processing interrupted", e);
+//    }
+//  }
+
   private DocumentReport analyzeContent(String header,
                                         String body,
                                         String metadata)
