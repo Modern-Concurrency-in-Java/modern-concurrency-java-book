@@ -25,20 +25,31 @@ public class TemplateProcessor {
     StringBuilder result = new StringBuilder();
 
     // Simplified template processing logic
-    int includeStart = template.indexOf("{{include:");
-    if (includeStart >= 0) {
-      int includeEnd = template.indexOf("}}", includeStart);
-      String includePath = template.substring(includeStart + 10, includeEnd);
+    String includeOpener = "{{include:";
+    String includeCloser = "}}";
+
+    int lastMatchEnd = 0;
+    int includeStart;
+
+    while ((includeStart = template.indexOf(includeOpener, lastMatchEnd)) >= 0) {
+      int includeEnd = template.indexOf(includeCloser, includeStart);
+      if (includeEnd == -1) break;
+
+      String includePath = template.substring(includeStart + includeOpener.length(), includeEnd);
+
+      result.append(template, lastMatchEnd, includeStart);
 
       String nestedContent = ScopedValue
           .where(RECURSION_DEPTH, currentDepth + 1)    // ⑥
           .call(() -> processTemplateInternal(loadTemplate(includePath)));
 
-      result.append(template, 0, includeStart);
       result.append(nestedContent);
-      result.append(template.substring(includeEnd + 2));
-    } else {
-      result.append(template);
+
+      lastMatchEnd = includeEnd + includeCloser.length();
+    }
+
+    if (includeStart == -1) {
+      result.append(template, lastMatchEnd, template.length());
     }
 
     return result.toString();         // ⑦
